@@ -1,4 +1,13 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
 @theme {
-  --color-mint-500: oklch(0.72 0.11 178);
+  --color-brand-primary: #00899e;
+  --color-brand-secondary: #d9de38;
+  --color-brand-tertiary: #283155;
+  --color-brand-text: #1a2339;
+  --color-brand-grey: #595b63;
+}
+
+.container {
+  @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-[1200px];
 }

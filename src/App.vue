@@ -4,21 +4,23 @@ import PageLayout from '@layouts/Layout.vue'
 
 <template>
   <PageLayout>
+    <div>
+      <h2>Computers</h2>
+      <ul>
+        <li v-for="computer in computers" :key="computer.id">
+          {{ computer.name }}
+        </li>
+      </ul>
+
+      <h2>Ships</h2>
+      <ul>
+        <li v-for="ship in ships" :key="ship.id">
+          {{ ship.name }}
+        </li>
+      </ul>
+    </div>
     <RouterView />
   </PageLayout>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>

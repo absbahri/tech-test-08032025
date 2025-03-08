@@ -1,7 +1,7 @@
+// src/utils/cn.ts
 import { twMerge } from 'tailwind-merge'
-
-type ClassValue = string | undefined | null | boolean
+import clsx, { type ClassValue } from 'clsx'
 
 export function cn(...classes: ClassValue[]) {
-  return twMerge(classes.filter(Boolean).join(' '))
+  return twMerge(clsx(...classes))
 }

@@ -1,26 +1,40 @@
-// src/stores/factory.ts
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 
 interface BaseItem {
-  id: string | number
+  id?: string | number // Made optional
 }
 
-interface StoreOptions<T extends BaseItem> {
-  id: string
+interface StoreOptions {
+  id?: string
 }
 
-export function createStore<T extends BaseItem>({ id }: StoreOptions<T>) {
+type OptionalId<T extends BaseItem> = Omit<T, 'id'> & { id?: string | number }
+
+export function createStore<T extends BaseItem>({
+  id = 'defaultStore',
+}: StoreOptions = {}) {
+  console.log('createStore running')
   return defineStore(id, () => {
     const items: Ref<T[]> = ref([])
 
-    const put = (newItem: T) => {
+    const put = (newItem: OptionalId<T>) => {
+      if (!newItem.id) {
+        newItem.id = Date.now() // Generate a unique ID if not provided
+      }
       const index = items.value.findIndex((item) => item.id === newItem.id)
       if (index !== -1) {
-        items.value[index] = newItem
+        items.value[index] = newItem as T
       } else {
-        items.value.push(newItem)
+        items.value.push(newItem as T)
       }
+    }
+
+    // Adds or updates multiple items in bulk
+    const push = (newItems: OptionalId<T>[]) => {
+      newItems.forEach((newItem) => {
+        put(newItem)
+      })
     }
 
     const patch = (id: T['id'], updatedFields: Partial<T>) => {
@@ -42,6 +56,6 @@ export function createStore<T extends BaseItem>({ id }: StoreOptions<T>) {
       return items.value
     }
 
-    return { items, put, patch, remove, getById, getAll }
-  })
+    return { items, put, patch, remove, getById, getAll, push }
+  })()
 }
