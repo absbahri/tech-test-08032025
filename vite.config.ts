@@ -1,19 +1,16 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
-import { fileURLToPath, URL } from 'url'
+import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@components': fileURLToPath(
-        new URL('./src/components', import.meta.url),
-      ),
-      '@layouts': fileURLToPath(new URL('./src/layouts', import.meta.url)),
-      '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@layouts': path.resolve(__dirname, 'src/layouts'),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
 })

@@ -1,11 +1,11 @@
+<script lang="ts" setup>
+import PageLayout from '@layouts/Layout.vue'
+</script>
+
 <template>
-  <nav>
-    <RouterLink to="/">Go to Home</RouterLink>
-    <RouterLink to="/21">Go to Ship</RouterLink>
-  </nav>
-  <main>
+  <PageLayout>
     <RouterView />
-  </main>
+  </PageLayout>
 </template>
 
 <style scoped>
