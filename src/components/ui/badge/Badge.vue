@@ -18,25 +18,24 @@ defineProps<Button>()
     :onclick="onClick"
     :class="
       cn(
-        'btn flex px-4 py-2 rounded-lg gap-2 flex-row cursor-pointer items-center justify-center ease-in-out duration-300',
+        'btn flex px-4 py-2 font-bold rounded-lg gap-2 flex-row pointer-events-none items-center justify-center ease-in-out duration-300',
         {
-          'text-white bg-brand-primary border-2 border-brand-primary hover:bg-brand-tertiary hover:text-white':
+          'text-white bg-brand-primary border-2 border-brand-primary ':
             variant === 'primary',
-          'text-black bg-brand-secondary border-2 border-brand-secondary hover:bg-brand-tertiary hover:text-white':
+          'text-black bg-brand-secondary border-2 border-brand-secondary':
             variant === 'secondary',
-          'text-white bg-red-500 border-2 border-red-500 hover:bg-red-600':
-            variant === 'error',
-          'text-white bg-red-500 border-2 border-red-500 hover:bg-red-600':
+          'text-white bg-red-500 border-2 border-red-500 ': variant === 'error',
+          'text-white bg-red-500 border-2 border-red-500 ':
             variant === 'danger',
-          'text-white bg-green-500 border-2 border-green-500 hover:bg-green-600':
+          'text-white bg-green-500 border-2 border-green-500':
             variant === 'success',
           'cursor-not-allowed opacity-50': disabled,
           'text-sm !py-1.5 !px-2 gap-1': size === 'sm',
-          'text-sm !py-1 !px-1 gap-1': size === 'xs',
+          'text-sm !py-[3px] !px-3 gap-1': size === 'xs',
         },
       )
     "
   >
-    <slot></slot>
+    <slot />
   </button>
 </template>

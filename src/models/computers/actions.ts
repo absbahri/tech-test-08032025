@@ -1,28 +1,36 @@
-export const add = () => {
-  console.log('add running')
-}
-export const remove = () => {
-  console.log('remove running')
-}
+import type { Type } from './'
 
-export const update = () => {
-  console.log('update running')
-}
+// export const add = () => {
+//   console.log('add running')
+// }
+// export const remove = () => {
+//   console.log('remove running')
+// }
+// export const update = () => {
+//   console.log('update running')
+// }
+// export const watch = () => {
+//   console.log('watch running')
+// }
 
-export const get = () => {
-  console.log('get running')
-}
+export const get = (computers: any, vesselId: number): Type[] => {
+  let vesselComputers: Type[] = []
 
-export const watch = () => {
-  console.log('watch running')
+  computers.filter((computer) => {
+    if (computer.vesselId === vesselId) {
+      vesselComputers.push(computer)
+    }
+  })
+
+  return vesselComputers
 }
 
 const actions = {
-  add,
-  remove,
-  update,
+  // add,
+  // remove,
+  // update,
+  // watch,
   get,
-  watch,
 }
 
 export default actions

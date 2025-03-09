@@ -1,61 +1,53 @@
+// storeFactory.ts
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 
 interface BaseItem {
-  id?: string | number // Made optional
+  id?: string | number
 }
 
 interface StoreOptions {
-  id?: string
+  id: string
 }
 
-type OptionalId<T extends BaseItem> = Omit<T, 'id'> & { id?: string | number }
-
-export function createStore<T extends BaseItem>({
-  id = 'defaultStore',
-}: StoreOptions = {}) {
-  console.log('createStore running')
+export function createStore<T extends BaseItem>({ id }: StoreOptions) {
   return defineStore(id, () => {
-    const items: Ref<T[]> = ref([])
+    const state: Ref<T[]> = ref([])
 
-    const put = (newItem: OptionalId<T>) => {
-      if (!newItem.id) {
-        newItem.id = Date.now() // Generate a unique ID if not provided
-      }
-      const index = items.value.findIndex((item) => item.id === newItem.id)
+    const update = (id: T['id'], updatedFields: Partial<T>) => {
+      const index = state.value.findIndex((item) => item.id === id)
       if (index !== -1) {
-        items.value[index] = newItem as T
-      } else {
-        items.value.push(newItem as T)
+        state.value[index] = { ...state.value[index], ...updatedFields }
       }
     }
 
-    // Adds or updates multiple items in bulk
-    const push = (newItems: OptionalId<T>[]) => {
+    const push = (newItems: T[]) => {
       newItems.forEach((newItem) => {
         put(newItem)
       })
     }
 
-    const patch = (id: T['id'], updatedFields: Partial<T>) => {
-      const index = items.value.findIndex((item) => item.id === id)
+    const put = (newItem: T) => {
+      const index = state.value.findIndex((item) => item.id === newItem.id)
       if (index !== -1) {
-        items.value[index] = { ...items.value[index], ...updatedFields }
+        state.value[index] = newItem
+      } else {
+        state.value.push(newItem)
       }
     }
 
     const remove = (id: T['id']) => {
-      items.value = items.value.filter((item) => item.id !== id)
+      state.value = state.value.filter((item) => item.id !== id)
     }
 
-    const getById = (id: T['id']): T | undefined => {
-      return items.value.find((item) => item.id === id)
+    const get = (id: T['id']): T | undefined => {
+      return state.value.find((item) => item.id === id)
     }
 
     const getAll = (): T[] => {
-      return items.value
+      return state.value
     }
 
-    return { items, put, patch, remove, getById, getAll, push }
-  })()
+    return { state, get, getAll, update, put, remove, push }
+  })
 }
