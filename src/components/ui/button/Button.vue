@@ -7,7 +7,7 @@ type Button = {
   disabled?: boolean
   type?: 'submit' | 'reset' | 'button' | 'link'
   variant: 'primary' | 'secondary' | 'error' | 'error' | 'success'
-  size: 'xs' | 'sm' | 'md'
+  size?: 'xs' | 'sm' | 'md'
 }
 
 defineProps<Button>()
@@ -15,7 +15,7 @@ defineProps<Button>()
 
 <template>
   <button
-    :onclick="onClick"
+    :onclick="() => onClick && onClick()"
     :class="
       cn(
         'btn flex px-4 py-2 rounded-lg gap-2 flex-row cursor-pointer items-center justify-center ease-in-out duration-300',
