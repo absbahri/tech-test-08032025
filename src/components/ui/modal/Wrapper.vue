@@ -29,19 +29,22 @@ const buttonClick = () => {
       )
     "
   >
-    <Button
-      variant="secondary"
-      class="absolute top-4 right-4 !p-4"
-      :onClick="
-        () => {
-          buttonClick()
-          props.onClose && props.onClose()
-        }
-      "
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
     >
-      <X />
-    </Button>
-    <h1 class="text-white absolute left-1/2 top-4">{{ props.open }}</h1>
-    <slot></slot>
+      <Button
+        variant="ghost"
+        class="absolute top-8 right-8 !mt-0"
+        :onClick="
+          () => {
+            buttonClick()
+            props.onClose && props.onClose()
+          }
+        "
+      >
+        <X />
+      </Button>
+      <slot></slot>
+    </div>
   </div>
 </template>

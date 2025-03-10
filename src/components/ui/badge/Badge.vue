@@ -6,7 +6,7 @@ type Button = {
   onClick?: () => void
   disabled?: boolean
   type?: 'submit' | 'reset' | 'button' | 'link'
-  variant: 'primary' | 'secondary' | 'error' | 'error' | 'success'
+  variant: 'primary' | 'secondary' | 'error' | 'danger' | 'success'
   size: 'xs' | 'sm' | 'md'
 }
 
@@ -24,9 +24,8 @@ defineProps<Button>()
             variant === 'primary',
           'text-black bg-brand-secondary border-2 border-brand-secondary':
             variant === 'secondary',
-          'text-white bg-red-500 border-2 border-red-500 ': variant === 'error',
           'text-white bg-red-500 border-2 border-red-500 ':
-            variant === 'danger',
+            variant === 'error' || variant === 'danger',
           'text-white bg-green-500 border-2 border-green-500':
             variant === 'success',
           'cursor-not-allowed opacity-50': disabled,

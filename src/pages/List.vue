@@ -2,13 +2,14 @@
 import Card from '@components/ui/card/Card.vue'
 import Badge from '@components/ui/badge/Badge.vue'
 
-import { useShipStore, Sample as Ships } from '@models/ships'
+import { useShipStore, type Type } from '@models/ships'
 
-const ships = useShipStore()
+// Correctly type the ships store
+const ships = useShipStore() as unknown as { state: Type[] }
 </script>
 
 <template>
-  <section>
+  <section class="ship-archive">
     <div class="container">
       <h1
         class="text-xl sm:text-2xl md:text-3xl font-bold md:mb-12 mb-6 text-center"
