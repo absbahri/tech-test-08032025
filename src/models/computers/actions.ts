@@ -13,7 +13,7 @@ import type { Type } from './'
 //   console.log('watch running')
 // }
 
-export const get = (computers: any, vesselId: number): Type[] => {
+export const getAll = (computers: any, vesselId: number): Type[] => {
   let vesselComputers: Type[] = []
 
   computers.filter((computer) => {
@@ -25,12 +25,28 @@ export const get = (computers: any, vesselId: number): Type[] => {
   return vesselComputers
 }
 
+export const get = (computers: any, computerId: number): Type => {
+  let computer: Type = {}
+
+  const comp = computers.filter((comp) => {
+    if (comp.id === computerId) {
+      return comp
+    }
+  })
+
+  if (comp.length > 0) {
+    computer = comp[0]
+  }
+
+  return computer
+}
+
 const actions = {
   // add,
   // remove,
   // update,
   // watch,
-  get,
+  getAll,
 }
 
 export default actions

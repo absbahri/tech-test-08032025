@@ -4,11 +4,13 @@ import { useRoute } from 'vue-router'
 
 import {
   useComputerStore,
+  useComputerEditStore,
   Actions as ComputerActions,
   type Type as ComputerType,
 } from '@models/computers'
 import {
   useShipStore,
+  useShipEditStore,
   Actions as ShipActions,
   type Type as ShipType,
 } from '@models/ships'
@@ -19,19 +21,79 @@ import Button from '@components/ui/button/Button.vue'
 import Modal from '@components/ui/modal/Modal.vue'
 import { ArrowRight } from 'lucide-vue-next'
 
+// States
 const computers = useComputerStore() as unknown as { state: ComputerType[] }
 const ships = useShipStore() as unknown as { state: ShipType[] }
 
+// Page Data
 const currentShip = ref<ShipType>({})
-const shipComputers = ref<ComputerType[]>([])
-const modalOpen = ref(false)
 
+const shipComputers = ref<ComputerType[]>([])
+
+const computerChanges = useComputerEditStore() as unknown as {
+  state: ComputerType
+  unset: () => void
+  set: (computer: ComputerType) => void
+}
+const shipChanges = useShipEditStore() as unknown as {
+  state: ShipType
+  unset: () => void
+  set: (ship: ShipType) => void
+}
+
+// Modal States
+const computerModalOpen = ref<{ id: number | null; open: boolean }>({
+  open: false,
+  id: null,
+})
+const shipModalOpen = ref<boolean>(false)
+
+// Page Data
 const pageId = useRoute().params.id
 
+// Run on load
 onMounted(() => {
   currentShip.value = ShipActions.get(ships.state, Number(pageId))
   shipComputers.value = ComputerActions.get(computers.state, Number(pageId))
 })
+
+// Ship Modal Methods
+const loadShip = (): void => {
+  shipChanges.set(currentShip.value)
+}
+
+const updateShipDetails = (data: Partial<ShipType>): void => {
+  shipChanges.set({ ...shipChanges.state, ...data })
+}
+
+const saveShip = (): void => {
+  useShipStore().update(currentShip.value.id, currentShip.value)
+  shipChanges.unset()
+}
+
+const closeShipModal = (): void => {
+  shipModalOpen.value = false
+  shipChanges.unset()
+}
+
+// Computer Modal Methods
+const loadComputer = (id: number): void => {
+  computerChanges.set(shipComputers.value.find((c) => c.id === id))
+}
+
+const updateComputerDetails = (data: Partial<ComputerType>): void => {
+  computerChanges.set({ ...shipChanges.state, ...data })
+}
+
+const saveComputer = (): void => {
+  useComputerStore().update(computerChanges.state.id, computerChanges.state)
+  computerChanges.unset()
+}
+
+const closeComputerModal = (): void => {
+  shipModalOpen.value = false
+  shipChanges.unset()
+}
 </script>
 
 <template>
@@ -81,7 +143,10 @@ onMounted(() => {
           Computer ID: {{ computer.id }}
         </p>
 
-        <Button variant="secondary" :onClick="() => (modalOpen = true)">
+        <Button
+          variant="secondary"
+          :onClick="() => (computerModalOpen.open = true)"
+        >
           Edit Computer <ArrowRight />
         </Button>
       </Wrapper>
@@ -89,14 +154,16 @@ onMounted(() => {
   </section>
   <Modal
     title="Test 2"
-    :open="modalOpen"
-    @closed="() => (modalOpen = false)"
-    :action="
-      () => {
-        console.log('submitted')
-      }
-    "
+    :open="computerModalOpen.open"
+    @closed="closeComputerModal"
+    :action="saveComputer"
   >
-    <h1>Test</h1>
+  </Modal>
+  <Modal
+    :title="currentShip.vesselName"
+    :open="computerModalOpen.open"
+    @closed="closeShipModal"
+    :action="saveShip"
+  >
   </Modal>
 </template>
